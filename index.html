@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>DES算法</title>
+    <script></script>
+</head>
+<body>
+    请输入加(解)密密钥:
+    <input id="txtKey" type="text" onfocus="this.select()" value="47944980" size="10">
+    <font color="red">(*目前密钥只能是八位)</font>
+    <br> 未加密文本:
+
+    <br>
+    <textarea id="taText">Hi,I'm meixuexiang.</textarea>
+    <input type="button" value="clear" onclick="document.all[this.sourceIndex-1].value=''">
+    <br>
+    <input type="button" value="Encrypt" onclick="jiami()">&nbsp;&nbsp;&nbsp;
+    <input type="button" value="Decrypt" onclick="jiemi()">
+    <br>
+    <br> 加密后文本:
+    <br>
+    <textarea id="taCipher"></textarea>
+    <input type="button" value="clear" onclick="document.all[this.sourceIndex-1].value=''">
+</body>
+
+</html>
