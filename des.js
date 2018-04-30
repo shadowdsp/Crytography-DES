@@ -113,7 +113,7 @@ DES.GenSubKey = function() { // 生成子密钥
 };
 
 //数组ar存储二进制数据,该函数将从头开始的每八位转换成对应的字符
-DES.Bit2Byte = function(ar,fCh){
+DES.Bit2Byte = function(ar, fCh) {
     var str="";
     if(fCh == "byte"){
         var tmpAr = ar.join("").match(/.{8}/g);
@@ -152,18 +152,22 @@ DES.Xor = function(A,B){
     return rtn;
 }
 
-DES.Permute = function(ar, tb) {
+// 置换
+DES.Permute = function(ar, tb) { 
     for(var i = 0, j = tb.length, rtn = new Array(j); i < j; i++)
         rtn[i] = ar[tb[i] - 1];
     return rtn;
 };
 
-DES.F_func = function(Ri,Ki)
-{
-    return this.Permute( this.S_func( this.Xor( this.Permute( Ri , this.E_Table ) , Ki) ) , this.P_Table);
+// 先做选择运算E，得到48位中间结果，在和子密钥Ki异或
+// 接着对得到的48位的数据进行S盒置换，得到32位的输出
+// 接着对得到的32位的数据进行置换运算P
+DES.F_func = function(Ri, Ki) {
+    return this.Permute(this.S_func(this.Xor(this.Permute(Ri, this.E_Table), Ki)) ,this.P_Table);
 };
+
 //ar为输入48位串数组
-DES.S_func = function(ar){
+DES.S_func = function(ar) {
     for(var i=0,arRtn = [];i<8;i++){
         var x = i*6;
         var j = parseInt(""+ar[x]+ar[x+5],2);
@@ -174,7 +178,7 @@ DES.S_func = function(ar){
 }
 
 //mode参数为处理模式."Encrypt":加密 "Decrypt":解密,默认为加密
-DES.Encrypt = function(mode){
+DES.Encrypt = function(mode) {
     mode = mode ? mode : "Encrypt";
 
     if(mode == "Decrypt")
@@ -184,36 +188,41 @@ DES.Encrypt = function(mode){
 
     for(var i = 0, j = plainTextAr.length; i < j; i++) {
         var arr = this.Permute(plainTextAr[i].split(""), this.IP_Table) // 初始置换IP
-        var AL = arr.slice(0,32);
-        var AR = arr.slice(32,64);
+        var AL = arr.slice(0, 32);
+        var AR = arr.slice(32, 64);
+        // 进行16次迭代，以(L0^f(R0,K1))作为R1，以R0作为L1.
         if (mode == "Decrypt") { 
             for(var k = 15; k >= 0; k--) {
-                var tmp = AR.slice(0,32);
-                AR = this.Xor(this.F_func(AR,this.subKeys[k]) , AL);
+                var tmp = AR.slice(0, 32);
+                AR = this.Xor(this.F_func(AR, this.subKeys[k]), AL);
                 AL = tmp;
             }
         } else {
-            for (var k = 0; k < 16; k++){
-                var tmp = AR.slice(0,32);
-                AR = this.Xor(this.F_func(AR,this.subKeys[k]) , AL);
+            for (var k = 0; k < 16; k++) { 
+                var tmp = AR.slice(0, 32);
+                AR = this.Xor(this.F_func(AR, this.subKeys[k]), AL);
                 AL = tmp;
             }
         }
-        plainTextAr[i] = this.Bit2Byte(this.Permute(AR.concat(AL), this.IPR_Table),(mode=="Decrypt"?"byte":"hex"));
+        // 逆初始置换IP1
+        // plainTextAr[i] = this.Bit2Byte(this.Permute(AR.concat(AL), this.IPR_Table), (mode == "Decrypt" ? "byte" : "hex"));
+        plainTextAr[i] = this.Permute(AR.concat(AL), this.IPR_Table);
     }
-    return plainTextAr.join("").trim();
+    return plainTextAr;
+    // return plainTextAr.join("").trim();
 }
 
 String.prototype.trim = function(){ return this.replace(/\s+$/g,"");}
 
-var $ = document.getElementById;
-
-function jiami(){
-   DES.init($("txtKey").value,$("taText").value );
-   $("taCipher").value = DES.Encrypt();
+function encrypt(plainText, key) {
+   DES.init(key, plainText);
+   res = DES.Encrypt();
+   return res;
 }
 
-function jiemi(){
-   DES.init($("txtKey").value,$("taCipher").value );
-   $("taText").value = DES.Encrypt("Decrypt");
+function decrypt(cipherText, key) {
+   DES.init(key, cipherText);
+   res = DES.Encrypt("Decrypt");
+   return res;
 }
+

@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs
+/jquery/1.4.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#button1").click(function () {
+                $("#objPage").load("www.baidu.com");
+            });
+            $("#button2").click(function () {
+                $("#objPage").load("/www.google.com");
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <a href="#" onclick="opens(1)">1</a>
+    <a href="#" onclick="opens(2)">2</a>
+    <div id="display"></div>
+    <!-- <div id="dis3" style="display:none">333</div> -->
+    <script>
+        function opens(obj) {
+            if (obj == 1) {
+                document.getElementById("display").innerHTML='<object type="text/html" data="./index.html" width="100%" height="100%"></object>';
+            } else {
+                document.getElementById("display").innerHTML='<object type="text/html" data="./task23.html" width="100%" height="100%"></object>';
+            }
+            // for (var i = 1; i <= 2; i++) {
+            //     if (i == obj) {
+            //         document.getElementById("dis" + i).style.display = "block"
+            //     } else
+            //         document.getElementById("dis" + i).style.display = "none"
+            // }
+        }
+    </script>
+</body>
+
+
+</html>
