@@ -91,12 +91,13 @@ var DES = {
     text : ""
 };
 
-DES.init = function(key,text){
+DES.init = function(key, text){
     if(key != this.key){
         this.key = key; 
         this.GenSubKey();
     }
-    this.text= text + "        ".substring(0, parseInt("07654321".charAt(text.length % 8), 10));
+    this.text = text + "        ".substring(0,parseInt("07654321".charAt(text.length % 8), 10));
+    console.log("text : " + this.text);
 };
 
 DES.GenSubKey = function() { // 生成子密钥
@@ -181,11 +182,13 @@ DES.S_func = function(ar) {
 DES.Encrypt = function(mode) {
     mode = mode ? mode : "Encrypt";
 
+    var plainTextAr;
     if(mode == "Decrypt")
-        var plainTextAr = this.Hex2Bin(this.text).join("").match(/.{64}/g);
+        plainTextAr = this.Hex2Bin(this.text).join("").match(/.{64}/g);
     else
-        var plainTextAr = this.Byte2Bit(this.text).join("").match(/.{64}/g);
+        plainTextAr = this.Byte2Bit(this.text).join("").match(/.{64}/g);
 
+    console.log("plainTextAr : " + plainTextAr.length + " - " + plainTextAr);
     for(var i = 0, j = plainTextAr.length; i < j; i++) {
         var arr = this.Permute(plainTextAr[i].split(""), this.IP_Table) // 初始置换IP
         var AL = arr.slice(0, 32);
@@ -208,7 +211,8 @@ DES.Encrypt = function(mode) {
         // plainTextAr[i] = this.Bit2Byte(this.Permute(AR.concat(AL), this.IPR_Table), (mode == "Decrypt" ? "byte" : "hex"));
         plainTextAr[i] = this.Permute(AR.concat(AL), this.IPR_Table);
     }
-    return plainTextAr;
+    console.log(plainTextAr);
+    return plainTextAr[0];
     // return plainTextAr.join("").trim();
 }
 
@@ -217,6 +221,7 @@ String.prototype.trim = function(){ return this.replace(/\s+$/g,"");}
 function encrypt(plainText, key) {
    DES.init(key, plainText);
    res = DES.Encrypt();
+   console.log("res : " + res);
    return res;
 }
 
@@ -225,4 +230,3 @@ function decrypt(cipherText, key) {
    res = DES.Encrypt("Decrypt");
    return res;
 }
-

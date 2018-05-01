@@ -5,10 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DES任务二和任务三</title>
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <!-- <link rel="stylesheet" href="./js/bootstrap.min.css">
+    <script src="./js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./normal.js"></script>
+    <script src="./js/echarts.common.min.js"></script>
+
+    <style>
+        body {
+            TEXT-ALIGN: center;
+        }
+
+        #chart {
+            MARGIN-RIGHT: auto;
+            MARGIN-LEFT: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,28 +63,174 @@
                 <form class="bs-example bs-example-form" role="form">
                     <div class="input-group">
                         <span class="input-group-addon">明文</span>
-                        <input type="text" class="form-control" placeholder="请输入长度为8的明文">
+                        <input type="text" id="plainText" class="form-control" placeholder="请输入长度为8的只包含字母或数字的明文" pattern="^[0-9|a-z|A-Z]{8}$">
                     </div>
                     <br>
                     <div class="input-group">
                         <span class="input-group-addon">密钥</span>
-                        <input type="text" class="form-control" placeholder="请输入长度为8的密钥">
+                        <input type="text" id="key" class="form-control" placeholder="请输入长度为8的只包含字母或数字的密钥" pattern="^[0-9|a-z|A-Z]{8}$">
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group ">
+                                <span class="input-group-addon">选择改变的位数</span>
+                                <select class="form-control" id="selbit">
+
+                                    <option selected>0</option>
+
+                                    <option>1</option>
+
+                                    <option>2</option>
+
+                                    <option>3</option>
+
+                                    <option>4</option>
+
+                                    <option>5</option>
+
+                                    <option>6</option>
+
+                                    <option>7</option>
+
+                                    <option>8</option>
+
+                                    <option>9</option>
+
+                                    <option>10</option>
+
+                                    <option>11</option>
+
+                                    <option>12</option>
+
+                                    <option>13</option>
+
+                                    <option>14</option>
+
+                                    <option>15</option>
+
+                                    <option>16</option>
+
+                                    <option>17</option>
+
+                                    <option>18</option>
+
+                                    <option>19</option>
+
+                                    <option>20</option>
+
+                                    <option>21</option>
+
+                                    <option>22</option>
+
+                                    <option>23</option>
+
+                                    <option>24</option>
+
+                                    <option>25</option>
+
+                                    <option>26</option>
+
+                                    <option>27</option>
+
+                                    <option>28</option>
+
+                                    <option>29</option>
+
+                                    <option>30</option>
+
+                                    <option>31</option>
+
+                                    <option>32</option>
+
+                                    <option>33</option>
+
+                                    <option>34</option>
+
+                                    <option>35</option>
+
+                                    <option>36</option>
+
+                                    <option>37</option>
+
+                                    <option>38</option>
+
+                                    <option>39</option>
+
+                                    <option>40</option>
+
+                                    <option>41</option>
+
+                                    <option>42</option>
+
+                                    <option>43</option>
+
+                                    <option>44</option>
+
+                                    <option>45</option>
+
+                                    <option>46</option>
+
+                                    <option>47</option>
+
+                                    <option>48</option>
+
+                                    <option>49</option>
+
+                                    <option>50</option>
+
+                                    <option>51</option>
+
+                                    <option>52</option>
+
+                                    <option>53</option>
+
+                                    <option>54</option>
+
+                                    <option>55</option>
+
+                                    <option>56</option>
+
+                                    <option>57</option>
+
+                                    <option>58</option>
+
+                                    <option>59</option>
+
+                                    <option>60</option>
+
+                                    <option>61</option>
+
+                                    <option>62</option>
+
+                                    <option>63</option>
+
+                                    <option>64</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">要执行的任务</span>
+                                <select class="form-control" id="sel23">
+                                    <option value="task2" selected>任务二</option>
+                                    <option value="task3">任务三</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <br>
                     <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <input type="text" class="form-control" placeholder="请输入长度为8的密钥">
-                    </div>
-                    <br>
-                    <div class="input-group">
-                        <input type="button" class="btn btn-primary" value="启动算法" onclick="solve()">
+                        <input type="button" class="btn btn-primary" value="启动算法" onclick="solve23()">
                     </div>
                 </form>
             </div>
         </div>
-
-
     </div>
+
+    <div id="chart" style="width: 600px;height:400px;"></div>
 
 
     <script src="./task.js"></script>
@@ -79,7 +238,6 @@
     <script>
         $(function () {
             $('#nav-son').find('a').each(function () {
-                console.log(this.href, document.location.href);
                 if (this.href == document.location.href || document.location.href.search(this.href) >=
                     0) {
                     $(this).parent().addClass('active'); // this.className = 'active';

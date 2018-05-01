@@ -6,7 +6,7 @@ function changeText(arr, n) {
         res[i] = arr[i];
     }
     while (n > 0) {
-        var id = Math.random() * 64 % 64; // 0-63随机
+        var id = Math.floor(Math.random() * 64) % 64; // 0-63随机
         if (!tag[id]) {
             tag[id] = true;
             n--;
@@ -24,15 +24,50 @@ function checkDif(arr1, arr2) {
             cnt++;
         }
     }
+    // console.log(cnt, arr1, arr2);
     return cnt;
 }
 
-// 参数是明文，密钥，任务，改变位数
-function solveTask(plainText, key, kind, n) {
-    var initCipherText = encrypt(plainText, key);
+function drawChart(count) {
+    console.log(count);
 
+    var x = new Array(64);
+    for (var i = 0; i < 64; i++) {
+        x[i] = i + 1;
+    }
+
+    var myChart = echarts.init(document.getElementById('chart'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: 'DES任务'
+        },
+        tooltip: {},
+        legend: {
+            data: ['密钥改变位数']
+        },
+        xAxis: {
+            data: x
+        },
+        yAxis: {},
+        series: [{
+            name: '密钥改变位数',
+            type: 'bar',
+            data: count
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+}
+
+// 参数是明文，密钥，任务，改变位数
+function solveTask23(plainText, key, kind, n) {
+    var initCipherText = encrypt(plainText, key);
     var count = Array(64).fill(0); // 计数
-    for (var i = 0; i < 1000; i++) {
+    var lun = 10; // 循环的轮次
+    for (var i = 0; i < lun; i++) {
         if (kind == 2) { // 任务2,改变明文
             var dif = checkDif(initCipherText, encrypt(changeText(plainText, n), key));
             count[dif]++;
@@ -41,5 +76,20 @@ function solveTask(plainText, key, kind, n) {
             count[dif]++;
         }
     }
-    return count;
+    drawChart(count);
+}
+
+function solve23() {
+    var val = $('#sel23 option:selected').val();
+    var bit = $('#selbit option:selected').text();
+    var kind = 0;
+    if (val == "task2") {
+        kind = 2;
+    } else if (val == "task3") {
+        kind = 3;
+    }
+    var plainText = $('#plainText').val();
+    var key = $('#key').val();
+    console.log(plainText, key, kind, bit);
+    solveTask23(plainText, key, kind, bit);
 }
