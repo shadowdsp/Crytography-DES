@@ -1,7 +1,7 @@
 // 对arr数组改变n位
 function changeText(arr, n) {
     var tag = Array(64).fill(false);
-    var res = new Array(64);
+    var res = new Array();
     for (var i = 0; i < 64; i++) {
         res[i] = arr[i];
     }
@@ -10,9 +10,18 @@ function changeText(arr, n) {
         if (!tag[id]) {
             tag[id] = true;
             n--;
-            res[id] = 1 - arr[id]; // 取反
+            // console.log(arr[id], res[id], id);
+            if (arr[id] == "1") {
+                res[id] = "0";
+            } else {
+                res[id] = "1";
+            }
+            // console.log(arr[id], res[id]);
         }
     }
+    // console.log(tag);
+    res = res.join('');
+    // console.log("arr : " + arr, "res : " + res);
     return res;
 }
 
@@ -24,16 +33,16 @@ function checkDif(arr1, arr2) {
             cnt++;
         }
     }
-    // console.log(cnt, arr1, arr2);
+    console.log(cnt, arr1, arr2);
     return cnt;
 }
 
 function drawChart(count) {
-    console.log(count);
+    // console.log(count);
 
-    var x = new Array(64);
-    for (var i = 0; i < 64; i++) {
-        x[i] = i + 1;
+    var x = new Array(65);
+    for (var i = 0; i < 65; i++) {
+        x[i] = i;
     }
 
     var myChart = echarts.init(document.getElementById('chart'));
@@ -45,14 +54,17 @@ function drawChart(count) {
         },
         tooltip: {},
         legend: {
-            data: ['密钥改变位数']
+            data: ['密文改变位数']
         },
         xAxis: {
             data: x
         },
-        yAxis: {},
+        yAxis: {
+            type: 'value',
+            name: '次数'
+        },
         series: [{
-            name: '密钥改变位数',
+            name: '密文改变位数',
             type: 'bar',
             data: count
         }]
@@ -64,15 +76,18 @@ function drawChart(count) {
 
 // 参数是明文，密钥，任务，改变位数
 function solveTask23(plainText, key, kind, n) {
-    var initCipherText = encrypt(plainText, key);
-    var count = Array(64).fill(0); // 计数
-    var lun = 10; // 循环的轮次
+    var initBitPlainText = DES.Byte2Bit(plainText).join("");
+    var initBitKey = DES.Byte2Bit(key).join("");
+
+    var initCipherText = encrypt(initBitPlainText, initBitKey);
+    var count = Array(65).fill(0); // 计数
+    var lun = 500; // 循环的轮次
     for (var i = 0; i < lun; i++) {
         if (kind == 2) { // 任务2,改变明文
-            var dif = checkDif(initCipherText, encrypt(changeText(plainText, n), key));
+            var dif = checkDif(initCipherText, encrypt(changeText(initBitPlainText, n), initBitKey));
             count[dif]++;
         } else { // 任务3,改变密钥
-            var dif = checkDif(initCipherText, encrypt(plainText, changeText(key, n)));
+            var dif = checkDif(initCipherText, encrypt(initBitPlainText, changeText(initBitKey, n)));
             count[dif]++;
         }
     }
@@ -90,6 +105,6 @@ function solve23() {
     }
     var plainText = $('#plainText').val();
     var key = $('#key').val();
-    console.log(plainText, key, kind, bit);
+    // console.log(plainText, key, kind, bit);
     solveTask23(plainText, key, kind, bit);
 }

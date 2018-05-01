@@ -59,7 +59,7 @@
                 <small>任务三：统计DES算法在明文固定情况，密钥改变1位、2位、...、64位时。输出密文位数改变情况。</small>
             </h3>
 
-            <div style="padding: 30px 200px 10px;">
+            <div style="padding: 30px 200px 0px;">
                 <form class="bs-example bs-example-form" role="form">
                     <div class="input-group">
                         <span class="input-group-addon">明文</span>
@@ -224,6 +224,8 @@
                     <br>
                     <div class="input-group">
                         <input type="button" class="btn btn-primary" value="启动算法" onclick="solve23()">
+
+                        <span class="input-grou-addon"> 随机跑500次 </span>
                     </div>
                 </form>
             </div>
@@ -233,7 +235,7 @@
     <div id="chart" style="width: 600px;height:400px;"></div>
 
 
-    <script src="./task.js"></script>
+    <script src="./task23.js"></script>
     <script src="./des.js"></script>
     <script>
         $(function () {
