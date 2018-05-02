@@ -33,7 +33,7 @@ function checkDif(arr1, arr2) {
             cnt++;
         }
     }
-    console.log(cnt, arr1, arr2);
+    // console.log(cnt, arr1, arr2);
     return cnt;
 }
 
@@ -80,6 +80,7 @@ function solveTask23(plainText, key, kind, n) {
     var initBitKey = DES.Byte2Bit(key).join("");
 
     var initCipherText = encrypt(initBitPlainText, initBitKey);
+    console.log("initCipher : ", initCipherText.join(''));
     var count = Array(65).fill(0); // 计数
     var lun = 500; // 循环的轮次
     for (var i = 0; i < lun; i++) {

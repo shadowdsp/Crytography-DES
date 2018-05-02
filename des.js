@@ -192,7 +192,6 @@ DES.S_func = function (ar) {
         var k = parseInt(ar.slice(x + 1, x + 5).join(""), 2); // 其他四位代表选择的列号
         arRtn = arRtn.concat(this.Oct2Bin[this.S_Box[i][j][k]].split(""));
     }
-    // console.log(ar, arRtn);
     return arRtn;
 }
 
@@ -209,11 +208,8 @@ DES.Encrypt = function () {
         AL = tmp;
     }
     // 逆初始置换IP1
-    // plainTextAr[i] = this.Bit2Byte(this.Permute(AR.concat(AL), this.IPR_Table), (mode == "Decrypt" ? "byte" : "hex"));
     plainTextAr = this.Permute(AR.concat(AL), this.IPR_Table);
-    // console.log(plainTextAr);
     return plainTextAr;
-    // return plainTextAr.join("").trim();
 }
 
 String.prototype.trim = function () {
@@ -222,15 +218,12 @@ String.prototype.trim = function () {
 
 function encrypt(plainText, key) {
     DES.init(key, plainText);
-    res = DES.Encrypt();
-    return res;
+    return DES.Encrypt();
 }
 
 function sPermute(i, arr) {
     // console.log(i, arr);
     var j = parseInt("" + arr[0] + arr[5], 2); // 第一位的第六位代表选中的行号
     var k = parseInt(arr.slice(1, 5).join(""), 2); // 其他四位代表选择的列号
-    // res = DES.Oct2Bin[DES.S_Box[i][j][k]];
-    var res = DES.S_Box[i][j][k];
-    return res;
+    return DES.S_Box[i][j][k];
 }
